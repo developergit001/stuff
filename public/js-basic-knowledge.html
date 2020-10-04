@@ -1,0 +1,317 @@
+<!html>
+
+
+<script>
+console.log("TEST 1 global and function (local) scope");
+var globaltest = "global scope test";
+function getName(){
+	var globaltest = "function scope (local scope) test ";
+	console.log(globaltest);
+}
+getName();
+console.log(globaltest);
+console.log("---------------------------");
+</script>
+
+<script>
+console.log("TEST 2 simple hoisting undefined");
+
+console.log('hoisting?',varname); //WORKS!!!, print undefined wich is correct!!!
+try{
+console.log('hoisting?',letname); //throw error, const, let is not supported for hoisting|
+} catch (err){
+	console.log('error hoisting for let/const is not supported');
+}
+var varname = "Hello";
+let letname = "Hello"; //let or const is not support hoisting
+console.log(varname); //print Hello
+console.log("---------------------------");
+</script>
+
+<script>
+console.log("TEST 3 b is UNDEFINED - hoisting in function scope");
+var a = 5; //unused
+var b = 2; //unused
+
+function test(){
+	var a = b; //(hoisting move variables on top {compiler step} but no their asigment...) b exist in local function scope but is not assigned yet. so b is undefined.
+	console.log('test a:',a);
+	var b = 10; //you CAN'T use let or const with hoisting, must use "var always"
+	var c = b; 
+	console.log('test c:',c);
+}
+test();
+console.log("---------------------------");
+</script>
+
+<script>
+console.log("TEST 4 hoisting (HOISTING DECLARATION in javascript)");
+/*
+hoisting: no matter where you declare variables, js always move to the top (compiler step)
+only move declaration, but not declare their values in compile step (only did that in interpretation step).
+*/
+var a1 = 10; //'var a' are on top anyway...
+var x1 = b1;  //b is detected 'var b' on bottom by hoisting but... is undefined in compiler step.
+console.log('hoisting a1:',a1); //show 10
+console.log('hoisting b1:',b1); //show undefined (hoisting detect 'var b1' so move top);
+console.log('hoisting x1:',x1); //show undefined (hoisting detect 'var x1' so move top);
+c1 = 5; //write operation are allowed, so there is no 'var c1' BUT javascript create at global scope.
+console.log('hoisting c1',c1); //show 5.
+var b1 = 20; //hoisting move 'var b1' on top of the program!.
+var c1; 		//hoisting move 'var c1' on top of the program!.
+
+/*
+hoisting with functions: 
+ * only work with function 'declaration' example: function x(){ ... } //valid for hoisting
+ * not work with function expression. example var myfx = function(){ ... } //NOT valid for hoisting
+*/
+
+fxDeclarHoist(); //WORKS!, because 'fxDeclarHoist' its a function declaration.
+
+//this function (declaration) object that its created in compilation step.
+function fxDeclarHoist(){
+	console.log('function declaration function fxDeclarHoist() works!');
+}
+
+try{
+	
+	//NOT WORKING, hoisting doesnt work with function expression.
+	expressFxHoist(); //ERROR!, Uncaught TypeError: expressFxHoist is not a function yet...
+
+}catch(err){ 
+	
+	console.log('error calling expressFxHoist() hoisting not working with fx expresion '); 
+
+};
+
+//this is a func expression, IS NOT allowed for hoisting.
+var expressFxHoist = function(){
+	console.log('function expression expressFxHoist() now its working');
+}
+expressFxHoist(); //this is the second time, so right its working
+console.log("---------------------------");
+</script>
+<script>
+console.log("TEST 5 use strict");
+//"use strict"; strict mode since ecma 5
+var name = 'Pablo'; //OK
+lastname = 'Caraballo'; //ERROR, lastname is undeclared (dont has 'var') on global scope!.
+console.log("---------------------------");
+
+console.log("TEST 6 closures");
+/*
+closures: 
+Javascript can manage some functions inside functions 
+
+(js manage function scoping)
+
+and remember their information scope at given time.
+whats happens is, when you declare a function that use a closure, 
+then javascript preserve the data in their lexical scope in a given time 
+taking a snapshot of their inner scope.
+closure:
+* a function wich its remember its scope.
+* a function remember the scope during the time of the declaration.
+
+*/
+var a = 10;
+function outer(c){
+	var b = 20;
+	var inner = function(){
+		console.log('inner closure executed');
+		console.log(a + ',' + b + ',' + c);
+	}
+	return inner;
+}
+
+var fnOuter = outer(70); 
+var fnOuter2 = outer(85); 
+fnOuter(); //prints 10,20,70
+a = 500;
+fnOuter2(); //prints 500,20,85
+console.log("---------------------------");
+
+console.log("TEST 7 begin simple callback");
+var some = "TEST 7 end - executed after 3 seconds!!!";
+
+function fx(){
+console.log(some);
+}
+setTimeout(fx,3000);
+console.log("---------------------------");
+
+console.log("TEST 8 javascript module pattern and closures (like class to hide vars)");
+/*
+module pattern: in javascript is usefull to hide variables (private var)
+the idea is to use scopes as a way to hide things
+simple callback using closures.
+*/
+function myClass(){
+	//closures variables
+	var name = "Pablo"; //hide in the lexical scope
+	var lastname = "Caraballo"; //hide in the lexical scope
+	
+	var obj = {
+		
+		'getName': function (){
+			return name;
+		},
+		'getLastName': function (){
+			return lastname;
+		}
+	
+	}
+	return obj;
+}
+var mycls = myClass();
+console.log('mycls.getName() ->' + mycls.getName());
+console.log("---------------------------");
+
+console.log("TEST 9 async with closures and IIFE");
+
+/*
+IIFE: Immediately invoked function expression
+With IIFE you can simple execute an anonymous function inmediately,
+you dont need to worry about the function name, if the name of the function alreay exists or
+things like that.
+*/
+
+for (let idx = 1; idx<=2; idx++){
+	//IIFE function
+	(
+		function (current_idx){
+		//new scope object 
+		//var current_idx = idx; //if you dont want to use function params, you can use local assignment.
+		setTimeout(
+			function(){ 
+				console.log('TEST 9 executed ' + current_idx + ' time/s!'); 
+				console.log("---------------------------");
+			}
+		,3000);
+		
+		
+		}
+	)(idx); //idx is the 'current_idx' param.
+
+}
+console.log("---------------------------");
+
+console.log("TEST 10 promise example");
+var url = "http://dummy.restapiexample.com/api/v1/employee/3";
+
+async function getData() {
+   
+    //ajax request using ecmascript fetch api
+    try {
+        var response = await fetch(url);
+        return response.json();
+    } catch (err) {
+        console.log("ajax error: " + err.message);
+    }
+}
+
+var data = getData();
+console.log('TEST 10 promise pending... -->',data); //promise
+
+//expect the resolve of the promise with then.
+data.then( res =>{
+	console.log('TEST 10 promise .then resolved --',res.message);
+}).catch(err => {
+	console.log('promise ajax request error');
+});
+console.log("---------------------------");
+
+console.log('TEST 11 "this"'); 
+/*
+this: this in javascript generally has the global object.
+in browsers 'this' are often "window" object (because you are in a window browser right?).
+but this and its attributes always depends in the execution context.
+*/
+var surname = "Paul";
+function getTested(){
+
+	/*
+	QUESTION 1: this.firstname its undefined?, ITS DEPENDS!!!, on the execution context.
+	If getTested() is called in the global scope, then yes, this.firstname is undefined.
+	If getTested() is called in the execution scope of 'anotherscope' then this.firstname contains 'Pablo'
+	
+	QUESTION 2: this.surname its undefined?: 
+	ITS DEPENDS!!!, what happen is that all global variables (var xx) are attached 
+	on the global object, in this case the 'window' object.
+	
+		* When getTested() is called without the 'anotherscope' json object, then javascript USES
+		'this' with the global window object, and in this case surname EXISTS!.
+	
+		* When getTested() is called WITH the 'anotherscope' json object, then javascript USES
+		'this' with the 'execution context' of 'anotherscope' object, and in this case inside 'anotherscope'
+		surname DOES NOT EXIST!, thats WHY this.surname right now is undefined.
+		
+		thats why its a BIG DEPENDS of the 'execution context'.
+	*/
+	console.log("firstname: ",this.firstname); 
+	console.log("surname: ",this.surname); 
+	console.log("------ end function call ------");
+}
+
+var anotherscope = {
+	"firstname":"Pablo",
+	"getTested": getTested
+	}
+
+console.log("------ begin global scope function call ------");
+getTested(); //in this case, 'this.firstname' doesnt have the execution scope 'lastname'.
+console.log("------ begin 'anotherscope' execution scope function call ------");
+anotherscope.getTested(); //but here, we define an object that has inside the 'firstname' key.
+
+console.log("---------------------------");
+
+//TEST 12 arrow function
+/*
+Classic function VS arrow functions:
+	* arrow function are always asigned like a anonymous function.
+	* arrow function CANT use hoisting, because there are anonymous, and you must use it
+	  like a function asigment like a variable (and remember that function expression cant use hoisting feature).
+	* arrow functions ALWAYS access 'this' to the global-outer scope (this = window object in browser)
+	* arrow functions dont have the reserved word 'arguments' to access func params.
+	* parentesis in arrow func are optional when you have only 1 parameter
+	  example const myfx = param1 => console.log(param1);
+	* arrow: is a good practice to declare with const, because your arrow func cannot be changed for anybody in your code.
+	* arrow: very often may use arrow func in callbacks, because arrow func dont need a name, and callback neither.
+	* classic func: must use when need to be hoisted (use hoisting feature).
+	* classic func: if need to use this with another inner context (change or use another execution context).
+*/
+const myarrowfx = (...arguments) => {
+	//ALWAYS take global-outer scope
+	console.log('this.name ALWAYS global/outer scope in arrow func?',this.name);
+	
+	/*
+	classic functions has the reserved word 'arguments' (for params), but arrow func NOT 
+	if you want access the arguments, then you MUST use a spread operator in params and treat it
+	like an array like params
+	example:
+	function classicfx(myname){ 
+		//arguments is reserved to access params of classic functions
+		console.log(myname,arguments);  
+	}
+	
+	*/
+	console.log('arguments:',arguments); 
+	return "hello " + arguments[0];
+};
+var anotherscope2 = {
+	"name":"Pablo2", //in arrow function NEVER take this inner execution scope
+	"myfx": myarrowfx
+	}
+function mysimplefunc(){
+console.log("TEST 12 arrow functions");
+console.log (myarrowfx('Arrow','second param'));
+console.log("---------------");
+console.log (anotherscope2.myfx('Arrow 2','second param'));
+console.log("---------------------------");
+}
+
+setTimeout(mysimplefunc,3500);
+
+</script>
+
+</html>

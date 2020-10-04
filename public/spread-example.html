@@ -1,0 +1,87 @@
+<script>
+console.log("-------------SPREAD OPERATOR / OPERADOR DE PROPAGACION ---------------------");
+console.log("MISMA REFERENCIA ARRAY");
+let numeros = [1,2,3];
+let numerosCopiados = numeros; //warning copiamos referencia,  no clona.
+
+numerosCopiados[0] = 0; //warning cambia las dos referencias.
+
+console.log(numeros); //[0,2,3]
+console.log(numerosCopiados); //[0,2,3]
+</script>
+
+<script>
+console.log("USANDO SPREAD OPERATOR, NUEVA REFERENCIA");
+////////CON SPREAD OPERATOR
+numeros = [1,2,3];
+numerosCopiados = [...numeros]; //AHORA SI, GENERA UNA NUEVA COPIA (spread)
+
+numerosCopiados[0] = 0; //warning cambia las dos referencias.
+
+console.log(numeros); //[1,2,3]
+console.log(numerosCopiados); //[0,2,3] //Ahora SI, solo modifica la copia!.
+</script>
+
+
+
+<script>
+console.log("SPREAD OPERATOR OTROS EJEMPLOS");
+const  numerosx =[1,2,3];
+const  otrosnumeros =[4,5,6];
+
+console.log("usando .concat 2 arrays [1,2,3] y [4,5,6]");
+console.log(numerosx.concat(otrosnumeros)); //[1,2,3,4,5,6]
+
+//CON SPREAD
+console.log("usando SPREAD con 2 arrays [1,2,3] y [4,5,6]");
+console.log([...numerosx, ...otrosnumeros]); //[1,2,3,4,5,6]
+
+//CON SPREAD agregamos 0 al principio y 7 y 8 al final.
+console.log("CON SPREAD agregamos 0 al principio y 7 y 8 al final.");
+console.log([0, ...numerosx, ...otrosnumeros, 7,8]); //[0,1,2,3,4,5,6,7,8]
+
+
+console.log("CON SPREAD SEPARADOR EN EL MEDIO");
+console.log([0, ...numerosx, 'SEPARADOR', ...otrosnumeros, 7,8]); //[0,1,2,3,4,5,6,7,8]	
+
+
+console.log("Trabajando con objetos, ejemplos");
+
+const user = {
+name:'Miguel',
+id:123
+}	
+
+let copyOfUser = user; //MAL
+
+copyOfUser = {...user}; //spread correcto.
+
+copyOfUser.web = 'www.google.com';
+
+console.log(user); //Mantiene las 2 primeras propiedades.
+console.log("asigno web al spread");
+console.log(copyOfUser); //Al ser una copia con spread independiente, asigno el atributo web.
+
+
+
+const userContact = {
+twitter:"/pepe",
+mail:"pepe@gmail.com"
+}
+
+console.log("Usando object.assign de 2 objetos");
+const fullUser = Object.assign({},copyOfUser,userContact);
+console.log(fullUser);
+
+console.log("Usando spread en 2 objetos");
+const newFullUser = {...copyOfUser, ...userContact};
+console.log(newFullUser);
+
+
+console.log("Modificando el mail con spread (gmail por hotmail)");
+const newFullUserModificandoElEmail = {...copyOfUser, ...userContact, mail:'pepe@hotmail.com'};
+console.log(newFullUserModificandoElEmail);
+
+
+
+</script>
