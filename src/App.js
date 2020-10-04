@@ -3,7 +3,9 @@ import './App.css';
 import useOrderCountHook from './useOrderCount';
 import RenderCounter from './RenderCounter';
 import RenderCounterFix from './RenderCounterFix';
-import Dates from './Dates';
+//Testing moment and date's functions import Dates from './Dates';
+import FetchingNormal from './FetchingNormal'
+import FetchingUseMemo from './FetchingUseMemo';
 
 function App() {
   const orderHook = useOrderCountHook();
@@ -15,7 +17,9 @@ function App() {
       <br></br>
       <RenderCounterFix />
       <br></br>
-      <Dates />
+      <FetchingNormal />
+      <br></br>
+      <FetchingUseMemo />
    </div>
   );
 }
