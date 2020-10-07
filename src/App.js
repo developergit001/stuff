@@ -6,6 +6,7 @@ import RenderCounterFix from './RenderCounterFix';
 //Testing moment and date's functions import Dates from './Dates';
 import FetchingNormal from './FetchingNormal'
 import FetchingUseMemo from './FetchingUseMemo';
+import MemoCallBack from './memocallback';
 
 function App() {
   const orderHook = useOrderCountHook();
@@ -20,6 +21,8 @@ function App() {
       <FetchingNormal />
       <br></br>
       <FetchingUseMemo />
+      <br></br>
+      <MemoCallBack></MemoCallBack>
    </div>
   );
 }
